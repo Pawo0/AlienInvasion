@@ -49,8 +49,18 @@ class AlienInvasion:
         # Start Alien Invasion in an inactive state
         self.game_active = False
 
-        # Make the Play button
-        self.play_button = Button(self, "Play")
+        # Make the Play button with lvl-s and set positions
+        self.play_button_easy = Button(self, "Play easy")
+        self.play_button_med = Button(self, "Play medium")
+        self.play_button_hard = Button(self, "Play hard")
+
+        self.play_button_med.prep_msg("Play medium")
+
+        self.play_button_easy.rect.bottom = self.play_button_med.rect.top - 20
+        self.play_button_easy.prep_msg("Play easy")
+
+        self.play_button_hard.rect.top = self.play_button_med.rect.bottom + 20
+        self.play_button_hard.prep_msg("Play hard")
 
     def run_game(self):
         """Start main loop for the game"""
@@ -80,9 +90,17 @@ class AlienInvasion:
 
     def _check_play_button(self, mouse_pos):
         """Start new game when player clicks Play"""
-        button_clicked = self.play_button.rect.collidepoint(mouse_pos)
-        if button_clicked and not self.game_active:
-            self.settings.initialize_dynamic_settings()
+        button_clicked_easy = self.play_button_easy.rect.collidepoint(mouse_pos)
+        button_clicked_med = self.play_button_med.rect.collidepoint(mouse_pos)
+        button_clicked_hard = self.play_button_hard.rect.collidepoint(mouse_pos)
+        if button_clicked_easy and not self.game_active:
+            self.settings.initialize_dynamic_settings_easy()
+            self._start_game()
+        if button_clicked_med and not self.game_active:
+            self.settings.initialize_dynamic_settings_medium()
+            self._start_game()
+        if button_clicked_hard and not self.game_active:
+            self.settings.initialize_dynamic_settings_hard()
             self._start_game()
 
     def _start_game(self):
@@ -116,6 +134,7 @@ class AlienInvasion:
         ) and self.game_active:
             self._fire_bullet()
         elif event.key == pygame.K_p:
+            self.settings.initialize_dynamic_settings_medium()
             self._start_game()
 
     def _check_keyup_events(self, event):
@@ -244,7 +263,11 @@ class AlienInvasion:
 
         # Draw the play button if the game is inactive
         if not self.game_active:
-            self.play_button.draw_button()
+            self.play_button_easy.draw_button()
+        if not self.game_active:
+            self.play_button_med.draw_button()
+        if not self.game_active:
+            self.play_button_hard.draw_button()
 
         # Make most recently draw screen visible
         pygame.display.flip()
