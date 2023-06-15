@@ -9,6 +9,7 @@ from ship import Ship
 from bullet import Bullet
 from alien import Alien
 from button import Button
+from scoreboard import Scoreboard
 
 
 class AlienInvasion:
@@ -32,8 +33,9 @@ class AlienInvasion:
         self.settings.screen_width = self.screen.get_rect().width
         """
 
-        # Create instance to store game statistics
+        # Create instance to store game statistics and create scoreboard
         self.stats = GameStats(self)
+        self.scoreboard = Scoreboard(self)
 
         # Game title
         pygame.display.set_caption("Alien Invasion")
@@ -73,7 +75,7 @@ class AlienInvasion:
                 self._update_aliens()
 
             self._update_screen()
-            self.clock.tick(60)
+            # self.clock.tick(60)
 
     def _check_events(self):
         # Watch for keyboard or mouse events
@@ -106,6 +108,7 @@ class AlienInvasion:
     def _start_game(self):
         self.stats.reset_stats()
         self.game_active = True
+        self.scoreboard.prep_score()
 
         # Get rid of any remaining bullets and aliens
         self.aliens.empty()
@@ -167,6 +170,12 @@ class AlienInvasion:
     def _check_bullet_alien_collisions(self):
         """Check for collision and get rid bullet and alien. Then reset fleet"""
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        if collisions:
+            for aliens in collisions.values():
+                self.stats.score += self.settings.alien_points * len(aliens)
+                self.scoreboard.prep_score()
+                # Check if there's new high score
+                self.scoreboard.check_high_score()
         if not self.aliens:
             # Destroy existing bullets and create new fleet
             self.bullets.empty()
@@ -256,6 +265,9 @@ class AlienInvasion:
         self.screen.fill(self.settings.bg_color)
         self.ship.blitme()
         self.aliens.draw(self.screen)
+
+        # Draw the score information
+        self.scoreboard.show_score()
 
         # Draw each bullet on screen
         for bullet in self.bullets.sprites():
