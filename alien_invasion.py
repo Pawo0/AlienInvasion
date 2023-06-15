@@ -108,10 +108,7 @@ class AlienInvasion:
     def _start_game(self):
         self.stats.reset_stats()
         self.game_active = True
-        self.scoreboard.prep_score()
-        self.scoreboard.prep_high_score()
-        self.scoreboard.prep_level()
-        self.scoreboard.prep_ships()
+        self.scoreboard.prep_images()
 
         # Get rid of any remaining bullets and aliens
         self.aliens.empty()
@@ -188,14 +185,18 @@ class AlienInvasion:
                 # Check if there's new high score
                 self.scoreboard.check_high_score()
         if not self.aliens:
-            # Destroy existing bullets and create new fleet
-            self.bullets.empty()
-            self._create_fleet()
-            self.settings.increase_speed()
+            self._start_new_level()
 
-            # Increase level
-            self.stats.level += 1
-            self.scoreboard.prep_level()
+    def _start_new_level(self):
+        """Clear the screen and start new level"""
+        # Destroy existing bullets and create new fleet
+        self.bullets.empty()
+        self._create_fleet()
+        self.settings.increase_speed()
+
+        # Increase level
+        self.stats.level += 1
+        self.scoreboard.prep_level()
 
     def _update_aliens(self):
         """Check if alien is on edge and update the positions of all aliens in the fleet"""
