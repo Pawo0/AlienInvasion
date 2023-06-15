@@ -75,7 +75,7 @@ class AlienInvasion:
                 self._update_aliens()
 
             self._update_screen()
-            # self.clock.tick(60)
+            self.clock.tick(60)
 
     def _check_events(self):
         # Watch for keyboard or mouse events
@@ -180,12 +180,19 @@ class AlienInvasion:
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
         if collisions:
             for aliens in collisions.values():
-                self.stats.score += self.settings.alien_points * len(aliens)
-                self.scoreboard.prep_score()
-                # Check if there's new high score
-                self.scoreboard.check_high_score()
+                self._add_points(aliens)
         if not self.aliens:
             self._start_new_level()
+
+    def _add_points(self, aliens):
+        """Add points for every shot alien and save score"""
+        # Point for every alien multiply by difficulty
+        self.stats.score += int(
+            self.settings.alien_points * len(aliens) * self.settings.difficulty_mult
+        )
+        self.scoreboard.prep_score()
+        # Check if there's new high score
+        self.scoreboard.check_high_score()
 
     def _start_new_level(self):
         """Clear the screen and start new level"""

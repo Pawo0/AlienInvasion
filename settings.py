@@ -31,6 +31,7 @@ class Settings:
         self.ship_speed = 2.5
         self.bullet_speed = 3.0
         self.alien_speed = 1.0
+        self.difficulty_mult = 1
 
         self._universal_dynamic_settings()
 
@@ -39,6 +40,7 @@ class Settings:
         self.ship_speed = 2.5
         self.bullet_speed = 3.0
         self.alien_speed = 1.5
+        self.difficulty_mult = 1.2
 
         self._universal_dynamic_settings()
 
@@ -47,6 +49,7 @@ class Settings:
         self.ship_speed = 2.5
         self.bullet_speed = 3.0
         self.alien_speed = 2
+        self.difficulty_mult = 1.5
 
         self._universal_dynamic_settings()
 
