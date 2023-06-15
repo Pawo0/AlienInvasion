@@ -81,7 +81,7 @@ class AlienInvasion:
         # Watch for keyboard or mouse events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                sys.exit()
+                self._exiting_game()
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
@@ -133,7 +133,7 @@ class AlienInvasion:
             self.ship.moving_left = True
         # Quit the game
         elif event.key == pygame.K_q:
-            sys.exit()
+            self._exiting_game()
         # Fire the bullets
         elif (
             event.key == pygame.K_SPACE or event.key == pygame.K_UP
@@ -149,6 +149,14 @@ class AlienInvasion:
             self.ship.moving_right = False
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
+
+    def _exiting_game(self):
+        try:
+            with open("data/hscore.txt", "w") as f:
+                f.write(str(self.stats.high_score))
+        except Exception as e:
+            print(f"Error {e}")
+        sys.exit()
 
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullet group"""
