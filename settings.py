@@ -17,6 +17,14 @@ class Settings:
         self.bullet_color = (60, 60, 60)
         self.bullet_allowed = 3
 
+        # Alien bullet setting
+        self.a_bullet_width = 3
+        self.a_bullet_height = 15
+        self.a_bullet_color = (255, 0, 0)
+        self.a_bullet_speed = 3.0
+        # Probability to shot in scale 1/x
+        self.prob_to_shot = 1000
+
         # Alien setting
         self.fleet_drop_speed = 10
 
@@ -28,8 +36,8 @@ class Settings:
 
     def initialize_dynamic_settings_easy(self):
         """Initialize settings that change throughout the game"""
-        self.ship_speed = 2.5
-        self.bullet_speed = 3.0
+        self.ship_speed = 3.5
+        self.bullet_speed = 5.0
         self.alien_speed = 1.0
         self.difficulty_mult = 1
 
@@ -37,8 +45,8 @@ class Settings:
 
     def initialize_dynamic_settings_medium(self):
         """Initialize settings that change throughout the game"""
-        self.ship_speed = 2.5
-        self.bullet_speed = 3.0
+        self.ship_speed = 3.5
+        self.bullet_speed = 5.0
         self.alien_speed = 1.5
         self.difficulty_mult = 1.2
 
@@ -46,8 +54,8 @@ class Settings:
 
     def initialize_dynamic_settings_hard(self):
         """Initialize settings that change throughout the game"""
-        self.ship_speed = 2.5
-        self.bullet_speed = 3.0
+        self.ship_speed = 3.5
+        self.bullet_speed = 5.0
         self.alien_speed = 2
         self.difficulty_mult = 1.5
 

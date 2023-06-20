@@ -1,4 +1,5 @@
 import sys
+from random import randint
 from time import sleep
 
 import pygame
@@ -10,6 +11,7 @@ from bullet import Bullet
 from alien import Alien
 from button import Button
 from scoreboard import Scoreboard
+from alien_bullet import AlienBullet
 
 
 class AlienInvasion:
@@ -47,6 +49,7 @@ class AlienInvasion:
         # Initialize the aliens' fleet
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
+        self.aliens_bullets = pygame.sprite.Group()
 
         # Start Alien Invasion in an inactive state
         self.game_active = False
@@ -73,6 +76,8 @@ class AlienInvasion:
                 self.ship.update()
                 self._update_bullets()
                 self._update_aliens()
+                self._random_alien_shoot()
+                self._update_alien_bullets()
 
             self._update_screen()
             self.clock.tick(60)
@@ -155,6 +160,15 @@ class AlienInvasion:
             print(f"Error {e}")
         sys.exit()
 
+    def _random_alien_shoot(self):
+        for alien in self.aliens.sprites():
+            self._fire_alien_bullet(alien)
+
+    def _fire_alien_bullet(self, alien):
+        if 1 == randint(1, self.settings.prob_to_shot):
+            new_a_bullet = AlienBullet(self, alien)
+            self.aliens_bullets.add(new_a_bullet)
+
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullet group"""
         if len(self.bullets) < self.settings.bullet_allowed:
@@ -174,6 +188,20 @@ class AlienInvasion:
         # Check for collision with aliens
         # and get rid (pozbyc) the bullet and the alien
         self._check_bullet_alien_collisions()
+
+    def _update_alien_bullets(self):
+        """Update position of each alien's bullet and delete old bullets"""
+        self.aliens_bullets.update()
+
+        # Delete old bullets if over the screen
+        for bullet in self.aliens_bullets.sprites().copy():
+            if bullet.rect.bottom > self.screen.get_rect().bottom:
+                self.aliens_bullets.remove(bullet)
+
+        # Check for collision with the ship
+        collision = pygame.sprite.spritecollideany(self.ship, self.aliens_bullets)
+        if collision:
+            self._ship_hit()
 
     def _check_bullet_alien_collisions(self):
         """Check for collision and get rid bullet and alien. Then reset fleet"""
@@ -236,6 +264,7 @@ class AlienInvasion:
             # Get rid any remaining bullets and aliens
             self.aliens.empty()
             self.bullets.empty()
+            self.aliens_bullets.empty()
 
             # Create new fleet and center position of ship
             self._create_fleet()
@@ -296,6 +325,10 @@ class AlienInvasion:
         # Draw each bullet on screen
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+
+        # Draw each alien bullet
+        for bullet in self.aliens_bullets.sprites():
+            bullet.draw_a_bullet()
 
         # Draw the play button if the game is inactive
         if not self.game_active:
