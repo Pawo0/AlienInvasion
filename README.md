@@ -1,5 +1,9 @@
 # Overview
 This project is a classic arcade-style game called "Alien Invasion" built using Python and the Pygame library. The player controls a ship that can move left and right at the bottom of the screen and shoot bullets to destroy incoming aliens. The game tracks the player's score, level, and the number of ships (lives) remaining.  
+## Preview
+![image](https://github.com/user-attachments/assets/524070b2-a487-43d9-a13e-1c98d76ce2e8)
+![image](https://github.com/user-attachments/assets/c4389bbf-4af3-4396-a480-e1578f5badb7)
+
 ## Features
 - Ship Movement: The player can move the ship left and right.
 - Shooting Bullets: The player can shoot bullets to destroy aliens.
